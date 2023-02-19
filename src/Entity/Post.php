@@ -2,71 +2,34 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
-use http\Client\Curl\User;
 
-#[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ORM\Entity()]
+#[ORM\Table(name: "post")]
 class Post
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Id()]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: "integer")]
     private int $id;
-    private ?string $title = null;
 
+    #[ORM\Column(type: "string", length: 150, nullable: true)]
+    private ?string $title = NULL;
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-
-    public function setTitle(?string $title): void
-    {
-        $this->title = $title;
-    }
-
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-
-    public function setContent(string $content): void
-    {
-        $this->content = $content;
-    }
-
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-
-    public function setImage(?string $image): void
-    {
-        $this->image = $image;
-    }
-
-
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-
-    public function setUser($user): void
-    {
-        $this->user = $user;
-    }
+    #[ORM\Column(type: "text", length: 320)]
     private string $content;
-    private ?string $image = null;
+
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $image = NULL;
+
+    #[ORM\Column(type: "datetime")]
+    private \DateTime $publishedAt;
+
+    #[ORM\ManyToOne(targetEntity: "App\Entity\User", inversedBy: "posts")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", onDelete: "CASCADE")]
     private $user;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -75,5 +38,70 @@ class Post
     {
         $this->id = $id;
         return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->username;
     }
 }
